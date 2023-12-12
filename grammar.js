@@ -5,7 +5,7 @@ module.exports = grammar({
   externals: ($) => [$.quoted_content],
   extras: ($) => [newline, /\s/, $.comment],
   rules: {
-    source_file: ($) => repeat($.item),
+    module: ($) => repeat($.item),
     item: ($) =>
       choice(
         $.function,

@@ -6,7 +6,7 @@ fn main {}
 
 --------------------------------------------------------------------------------
 
-(source_file 
+(module  
 	(item
 		(function
 			(identifier)
@@ -20,7 +20,7 @@ fn main() {}
 
 --------------------------------------------------------------------------------
 
-(source_file 
+(module   
 	(item
 		(function
 			(identifier)
@@ -37,7 +37,7 @@ fn add(a: int, b: int) -> int {
 
 --------------------------------------------------------------------------------
 
-(source_file 
+(module   
 	(item
 		(function
 			(identifier)

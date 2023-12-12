@@ -9,7 +9,7 @@ import foo.{x, y.{z, zz}, *}
 
 --------------------------------------------------------------------------------
 
-(source_file 
+(module 
 	(item
 		(extern_import
 			(string
