@@ -4,7 +4,10 @@
   "description": "",
   "main": "bindings/node",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "generate": "tree-sitter generate",
+    "test": "tree-sitter test",
+    "format": "prettier --write grammar.js",
+    "check-formatted": "prettier --check grammar.js"
   },
   "author": "",
   "license": "ISC",
