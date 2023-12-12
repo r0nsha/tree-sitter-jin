@@ -43,12 +43,18 @@ module.exports = grammar({
         )
       ),
     function_parameters: ($) =>
-      seq("(", optional(separated_seq($.function_parameter, ",")), ")"),
+      seq(
+        "(",
+        optional(separated_seq($.function_parameter, ",")),
+        optional(seq("..", optional(","))),
+        ")"
+      ),
     function_parameter: ($) => seq($.pattern, optional($.type_annotation)),
     extern_function: ($) =>
       prec.right(
         seq(
           "fn",
+          "extern",
           field("name", $.identifier),
           optional($.visibility),
           optional(field("parameters", $.function_parameters)),
