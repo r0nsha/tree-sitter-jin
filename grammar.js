@@ -14,15 +14,17 @@ module.exports = grammar({
         seq(
           "fn",
           field("name", $.identifier),
-          field("parameters", $.function_parameters)
-          // TODO: return type
-          // TODO: block
+          optional(field("parameters", $.function_parameters)),
+          optional($.function_return_type),
+          field("body", $.block)
         )
       ),
     function_parameters: ($) =>
-      // TODO: parentheses are optional
       seq("(", optional(separated_seq($.function_parameter, ",")), ")"),
     function_parameter: ($) => seq($.pattern, optional($.type_annotation)),
+
+    expression: ($) => choice($.block),
+    block: ($) => seq("{", "}"),
 
     // Patterns
     pattern: ($) => choice($.identifier, $.discard),
@@ -35,10 +37,10 @@ module.exports = grammar({
       seq(
         "fn",
         field("name", $.identifier),
-        // TODO: parentheses are optional
-        seq("(", optional(separated_seq($.type, ",")), ")")
-        // TODO: return type
+        optional(seq("(", optional(separated_seq($.type, ",")), ")")),
+        optional($.function_return_type)
       ),
+    function_return_type: ($) => seq("->", field("return_type", $.type)),
 
     // Identifiers
     visibility_modifier: ($) => optional("*"),

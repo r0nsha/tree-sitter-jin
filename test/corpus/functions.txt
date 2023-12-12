@@ -1,10 +1,58 @@
 ================================================================================
-Function items
+Function: Without parameters
 ================================================================================
 
-// Comment 1
-// Comment 2
+fn main {}
 
 --------------------------------------------------------------------------------
 
-(source_file (comment) (comment))
+(source_file 
+	(item
+		(function
+			(identifier)
+			(block))))
+
+================================================================================
+Function: Empty parameters
+================================================================================
+
+fn main() {}
+
+--------------------------------------------------------------------------------
+
+(source_file 
+	(item
+		(function
+			(identifier)
+			(function_parameters)
+			(block))))
+
+================================================================================
+Function: With parameters & return type
+================================================================================
+
+fn add(a: int, b: int) -> int {}
+
+--------------------------------------------------------------------------------
+
+(source_file 
+	(item
+		(function
+			(identifier)
+			(function_parameters
+				(function_parameter
+					(pattern
+						(identifier))
+					(type_annotation
+						(type
+							(identifier))))
+				(function_parameter
+					(pattern
+						(identifier))
+					(type_annotation
+						(type
+							(identifier)))))
+			(function_return_type
+				(type
+					(identifier)))
+			(block))))
