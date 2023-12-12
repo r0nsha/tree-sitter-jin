@@ -23,8 +23,9 @@ module.exports = grammar({
       seq("(", optional(separated_seq($.function_parameter, ",")), ")"),
     function_parameter: ($) => seq($.pattern, optional($.type_annotation)),
 
-    expression: ($) => choice($.block),
-    block: ($) => seq("{", "}"),
+    statement: ($) => choice($.expression),
+    expression: ($) => choice($.block, $.identifier, $.literal),
+    block: ($) => seq("{", repeat($.statement), "}"),
 
     // Patterns
     pattern: ($) => choice($.identifier, $.discard),
@@ -48,6 +49,7 @@ module.exports = grammar({
     discard: ($) => "_",
 
     // Literals
+    literal: ($) => choice($.string, $.float, $.integer),
     string: ($) =>
       seq(
         '"',

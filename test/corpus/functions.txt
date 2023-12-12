@@ -31,7 +31,9 @@ fn main() {}
 Function: With parameters & return type
 ================================================================================
 
-fn add(a: int, b: int) -> int {}
+fn add(a: int, b: int) -> int {
+	a
+}
 
 --------------------------------------------------------------------------------
 
@@ -55,4 +57,7 @@ fn add(a: int, b: int) -> int {}
 			(function_return_type
 				(type
 					(identifier)))
-			(block))))
+			(block
+				(statement
+					(expression
+						(identifier)))))))
