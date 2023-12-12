@@ -5,7 +5,8 @@
   "main": "bindings/node",
   "scripts": {
     "generate": "tree-sitter generate",
-    "test": "tree-sitter generate && tree-sitter test",
+    "test": "tree-sitter test",
+    "gtest": "tree-sitter generate && tree-sitter test",
     "format": "prettier --write grammar.js",
     "check-formatted": "prettier --check grammar.js"
   },
