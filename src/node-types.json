@@ -95,7 +95,7 @@
       "required": true,
       "types": [
         {
-          "type": "quoted_content",
+          "type": "string",
           "named": true
         }
       ]

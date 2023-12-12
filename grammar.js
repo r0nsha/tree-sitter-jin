@@ -21,15 +21,14 @@ module.exports = grammar({
     import: ($) => seq("import", $._import_name),
     _import_name: ($) =>
       seq(
-        $.identifier,
-        optional($.visibility),
+        seq($.identifier, optional($.visibility)),
         optional(choice(seq(".", $._import_node), seq("as", $.identifier)))
       ),
     _import_node: ($) =>
       choice($._import_name, $._import_group, $._import_glob),
     _import_group: ($) => seq("{", separated_seq($._import_node, ","), "}"),
     _import_glob: ($) => "*",
-    extern_import: ($) => seq("import", "extern", $.quoted_content),
+    extern_import: ($) => seq("import", "extern", $.string),
 
     // Functions
     function: ($) =>

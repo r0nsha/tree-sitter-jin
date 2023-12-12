@@ -1,0 +1,33 @@
+================================================================================
+Imports
+================================================================================
+
+import extern "foo"
+import foo.bar*
+import foo* as bar
+import foo.{x, y.{z, zz}, *}
+
+--------------------------------------------------------------------------------
+
+(source_file 
+	(item
+		(extern_import
+			(string
+				(quoted_content))))
+	(item
+		(import
+			(identifier)
+			(identifier)
+			(visibility)))
+	(item
+		(import
+			(identifier)
+			(visibility)
+			(identifier)))
+	(item
+		(import
+			(identifier)
+			(identifier)
+			(identifier)
+			(identifier)
+			(identifier))))
