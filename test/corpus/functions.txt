@@ -58,6 +58,5 @@ fn add(a: int, b: int) -> int {
 				(type
 					(identifier)))
 			(block
-				(statement
-					(expression
-						(identifier)))))))
+				(expression
+					(identifier))))))

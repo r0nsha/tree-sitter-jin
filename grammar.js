@@ -6,7 +6,30 @@ module.exports = grammar({
   extras: ($) => [newline, /\s/, $.comment],
   rules: {
     source_file: ($) => repeat($.item),
-    item: ($) => choice($.function),
+    item: ($) =>
+      choice(
+        $.function,
+        $.extern_function,
+        $.let,
+        $.type_definition,
+        $.import,
+        $.extern_let,
+        $.extern_import
+      ),
+
+    // Imports
+    import: ($) => seq("import", $._import_name),
+    _import_name: ($) =>
+      seq(
+        $.identifier,
+        optional($.visibility),
+        optional(choice(seq(".", $._import_node), seq("as", $.identifier)))
+      ),
+    _import_node: ($) =>
+      choice($._import_name, $._import_group, $._import_glob),
+    _import_group: ($) => seq("{", separated_seq($._import_node, ","), "}"),
+    _import_glob: ($) => "*",
+    extern_import: ($) => seq("import", "extern", $.quoted_content),
 
     // Functions
     function: ($) =>
@@ -14,6 +37,7 @@ module.exports = grammar({
         seq(
           "fn",
           field("name", $.identifier),
+          optional($.visibility),
           optional(field("parameters", $.function_parameters)),
           optional($.function_return_type),
           field("body", $.block)
@@ -22,13 +46,32 @@ module.exports = grammar({
     function_parameters: ($) =>
       seq("(", optional(separated_seq($.function_parameter, ",")), ")"),
     function_parameter: ($) => seq($.pattern, optional($.type_annotation)),
+    extern_function: ($) =>
+      prec.right(
+        seq(
+          "fn",
+          field("name", $.identifier),
+          optional($.visibility),
+          optional(field("parameters", $.function_parameters)),
+          optional($.function_return_type)
+        )
+      ),
 
-    statement: ($) => choice($.expression),
-    expression: ($) => choice($.block, $.identifier, $.literal),
-    block: ($) => seq("{", repeat($.statement), "}"),
+    // Expressions
+    expression: ($) => choice($.let, $.block, $.identifier, $.literal),
+    block: ($) => seq("{", repeat($.expression), "}"),
 
-    // Patterns
-    pattern: ($) => choice($.identifier, $.discard),
+    // Variables
+    let: ($) =>
+      seq("let", $.pattern, optional($.type_annotation), "=", $.expression),
+    extern_let: ($) =>
+      seq(
+        "let",
+        "extern",
+        $.identifier,
+        optional($.visibility),
+        $.type_annotation
+      ),
 
     // Types
     type_annotation: ($) => seq(":", field("type", $.type)),
@@ -42,9 +85,28 @@ module.exports = grammar({
         optional($.function_return_type)
       ),
     function_return_type: ($) => seq("->", field("return_type", $.type)),
+    type_definition: ($) =>
+      seq(
+        "type",
+        $.identifier,
+        optional("extern"),
+        choice(seq("(", separated_seq($.type_definition_field, ","), ")"))
+      ),
+    type_definition_field: ($) =>
+      seq($.identifier, optional($.visibility), $.type_annotation),
+
+    // Patterns
+    pattern: ($) =>
+      seq(
+        optional($.mutability),
+        choice($.identifier, $.discard),
+        optional($.visibility)
+      ),
 
     // Identifiers
-    visibility_modifier: ($) => optional("*"),
+
+    mutability: ($) => "mut",
+    visibility: ($) => "*",
     identifier: ($) => /[_a-z][_0-9a-z]*/,
     discard: ($) => "_",
 
